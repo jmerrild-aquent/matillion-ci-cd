@@ -46,7 +46,8 @@ jobs:
       - name: Gets all diff files in PR
         run: |
           cd /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/
-          DIFF_FILES::git diff --name-only  >> $GITHUB_ENV
+          ls
+          # DIFF_FILES::git diff --name-only  >> $GITHUB_ENV
           # printf '%s\n' "$DIFF_FILES" 
 
 
