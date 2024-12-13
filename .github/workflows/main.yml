@@ -1,0 +1,52 @@
+# This is workflow job to execute JSON-compare of matillion objects
+
+name: JSON-compare
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # this is the job that creates the json-difference
+  compare:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checout main
+        uses: actions/checkout@v4
+        with:
+          path: main
+      - name: 'Checkout PR branch'
+        uses: actions/checkout@v4
+        with:
+          ref:  ${{ github.event.pull_request.head.sha }}
+          path: pull-request
+      # Set up Go for jd command funtionality
+      - uses: actions/setup-go@v4
+        with:
+            go-version: '1.20'
+
+      # Install jd command funtionality
+      - name: Install json-diff
+        run:
+         go install github.com/josephburnett/jd@latest
+      # Gets all diff files
+      - name: Gets all diff files in PR
+        run:
+          git diff --name-only 
+
+      # Calls json diff action
+      - name: Call json-diff
+        run: 
+         jd "/home/runner/work/ci-cd-poc/ci-cd-poc/main/ROOT/Fact Financial Metrics/Fact Financial Metrics.ORCHESTRATION" "/home/runner/work/ci-cd-poc/ci-cd-poc/pull-request/ROOT/Fact Financial Metrics/Fact Financial Metrics.ORCHESTRATION"
