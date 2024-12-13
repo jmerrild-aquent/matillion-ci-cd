@@ -47,7 +47,7 @@ jobs:
         run: |
           cd /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/
           echo "DIFF_FILES::$(echo git diff --name-only"  >> "$GITHUB_ENV"
-          printf '%s\n' "$DIFF_FILES" 
+          # printf '%s\n' "$DIFF_FILES" 
 
 
       # Calls json diff action
