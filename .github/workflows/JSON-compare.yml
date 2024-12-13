@@ -46,9 +46,9 @@ jobs:
       - name: Gets all diff files in PR
         run: |
           cd /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/
-          echo git diff --name-only 
+          echo "::set-output name=DIFF_FILES::git diff --name-only" 
 
       # Calls json diff action
       - name: Call json-diff
         run: 
-         echo jd "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/Fact Financial Metrics/Fact_Financial_Metrics.ORCHESTRATION" "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/pull-request/ROOT/Fact Financial Metrics/Fact_Financial_Metrics.ORCHESTRATION"
+          jd "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/Fact Financial Metrics/Fact_Financial_Metrics.ORCHESTRATION" "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/pull-request/ROOT/Fact Financial Metrics/Fact_Financial_Metrics.ORCHESTRATION"
