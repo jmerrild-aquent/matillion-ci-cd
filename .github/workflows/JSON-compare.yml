@@ -44,10 +44,10 @@ jobs:
       # Gets all diff files
       - name: Gets all diff files in PR
         run: |
-          cd /home/runner/work/ci-cd-poc/ci-cd-poc/main/ROOT/
+          cd /home/runner/work/{{ github.event.repository.name }}/{{ github.event.repository.name }}/main/ROOT/
           git diff --name-only 
 
       # Calls json diff action
       - name: Call json-diff
         run: 
-         jd "/home/runner/work/ci-cd-poc/ci-cd-poc/main/ROOT/Fact Financial Metrics/Fact Financial Metrics.ORCHESTRATION" "/home/runner/work/ci-cd-poc/ci-cd-poc/pull-request/ROOT/Fact Financial Metrics/Fact Financial Metrics.ORCHESTRATION"
+         jd "/home/runner/work/{{ github.event.repository.name }}/{{ github.event.repository.name }}/main/ROOT/Fact Financial Metrics/Fact Financial Metrics.ORCHESTRATION" "/home/runner/work/{{ github.event.repository.name }}/{{ github.event.repository.name }}/pull-request/ROOT/Fact Financial Metrics/Fact Financial Metrics.ORCHESTRATION"
