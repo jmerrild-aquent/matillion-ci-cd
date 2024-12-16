@@ -54,7 +54,7 @@ jobs:
 
       # Calls json diff action
       - name: Call json-diff
-        run: 
+        run: |
           for i in $DIFF_FILES_LIST; do 
             echo ${i}
             # b =${i##*/}
