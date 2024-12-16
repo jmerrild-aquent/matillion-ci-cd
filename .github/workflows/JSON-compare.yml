@@ -46,9 +46,8 @@ jobs:
       - name: Gets all diff files in PR
         run: |
           cd /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/
-          ls
-          # DIFF_FILES::$ git diff-tree --quiet main ${{ github.event.pull_request.head.name }} || echo changed>> $GITHUB_ENV
-          # printf '%s\n' "$DIFF_FILES" 
+          DIFF_FILES::$ git diff-tree --quiet main ${{ github.event.pull_request.head.name }} || echo changed >> $GITHUB_ENV
+          printf '%s\n' "$DIFF_FILES" 
 
 
       # Calls json diff action
