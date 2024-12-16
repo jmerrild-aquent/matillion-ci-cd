@@ -57,7 +57,7 @@ jobs:
             echo ${i}
             b =${i##*/}
             echo ${b}
-            DIFF_RESULTS_${b}=(jd "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/${i}" "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/pull-request/${i}")
+            DIFF_RESULTS_${b}=jd "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/${i}" "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/pull-request/${i}"
             echo $DIFF_RESULTS_${b}
           done
           # jd "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/Fact Financial Metrics/Fact_Financial_Metrics.ORCHESTRATION" "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/pull-request/ROOT/Fact Financial Metrics/Fact_Financial_Metrics.ORCHESTRATION"
