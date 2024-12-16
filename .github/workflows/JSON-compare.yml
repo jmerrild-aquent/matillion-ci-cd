@@ -47,7 +47,7 @@ jobs:
         run: |
           cd /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/
           ls
-          # DIFF_FILES::git diff --name-only  >> $GITHUB_ENV
+          # DIFF_FILES::git diff-tree --name-only  >> $GITHUB_ENV
           # printf '%s\n' "$DIFF_FILES" 
 
 
