@@ -45,14 +45,19 @@ jobs:
       # Gets all diff files
       - name: Gets all diff files in PR
         run: |
-          cd ${{ github.workspace }}/pull-request/ROOT/          
-          git log --name-only
+          cd ${{ github.workspace }}/pull-request/ROOT/
           DIFF_FILES=$(git log --name-only) >> $GITHUB_ENV
-          # GITHUB_SHA_SHORT=$(echo $GITHUB_SHA | cut -c 1-6)
-          printf '%s\n' "$DIFF_FILES" 
+          printf '%s\n files to be diffed' "$DIFF_FILES" 
 
 
       # Calls json diff action
       - name: Call json-diff
         run: 
-          jd "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/Fact Financial Metrics/Fact_Financial_Metrics.ORCHESTRATION" "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/pull-request/ROOT/Fact Financial Metrics/Fact_Financial_Metrics.ORCHESTRATION"
+          for i in $DIFF_FILES; do 
+            echo ${i}
+            b =${i##*/}
+            echo ${b}
+            DIFF_RESULTS_${b}=(jd "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/${i}" "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/pull-request/${i}")
+            echo $DIFF_RESULTS_${b}
+          done
+          # jd "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/Fact Financial Metrics/Fact_Financial_Metrics.ORCHESTRATION" "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/pull-request/ROOT/Fact Financial Metrics/Fact_Financial_Metrics.ORCHESTRATION"
