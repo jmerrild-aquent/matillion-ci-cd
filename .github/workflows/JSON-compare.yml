@@ -47,7 +47,7 @@ jobs:
         run: |
           cd ${{ github.workspace }}/pull-request/ROOT/
           DIFF_FILES=$(git log --name-only) >> $GITHUB_ENV
-          DIFF_FILES_LIST=tr '\n' ',' < $DIFF_FILES >
+          DIFF_FILES_LIST=${$DIFF_FILES##*/}
           DIFF_FILES_LIST=${DIFF_FILES_LIST} >> $GITHUB_ENV
           printf '%s\n files to be diffed' "$DIFF_FILES_LIST" 
 
