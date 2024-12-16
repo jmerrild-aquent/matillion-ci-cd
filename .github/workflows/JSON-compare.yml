@@ -47,6 +47,7 @@ jobs:
         run: |
           cd ${{ github.workspace }}/pull-request/ROOT/
           DIFF_FILES=$(git log --name-only) >> $GITHUB_ENV
+          echo $DIFF_FILES
           files=$DIFF_FILES
           echo files
           DIFF_FILES_LIST=${files##*/}
