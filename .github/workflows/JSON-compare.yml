@@ -45,7 +45,7 @@ jobs:
       # Gets all diff files
       - name: Gets all diff files in PR
         run: |
-          cd ${{ github.workspace }}
+          cd ${{ github.workspace }}/pull-request/
           # cd /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/
           DIFF_FILES=$(git-diff-files) >> $GITHUB_ENV
           # GITHUB_SHA_SHORT=$(echo $GITHUB_SHA | cut -c 1-6)
