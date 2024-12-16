@@ -47,7 +47,7 @@ jobs:
         run: |
           cd ${{ github.workspace }}/pull-request/ROOT/          
           # cd /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/
-          DIFF_FILES=$(git-diff-files) >> $GITHUB_ENV
+          DIFF_FILES=$(git diff-files) >> $GITHUB_ENV
           # GITHUB_SHA_SHORT=$(echo $GITHUB_SHA | cut -c 1-6)
           printf '%s\n' "$DIFF_FILES" 
 
