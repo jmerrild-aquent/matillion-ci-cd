@@ -49,12 +49,22 @@ jobs:
           DIFF_FILES=$(git log --name-only) >> $GITHUB_ENV
           echo $DIFF_FILES
           files=$DIFF_FILES
-          echo files
-          DIFF_FILES_LIST=${files##*/}
+          echo $files
+          files=${files/".TRANSFORMATION"/".TRANSFORMATION,"}
+          diff_files_list=${files/".ORCHISTRATION"/".ORCHISTRATION,"}
           DIFF_FILES_LIST=${DIFF_FILES_LIST} >> $GITHUB_ENV
           echo $DIFF_FILES_LIST
 
-
+      # # set s2 credentials 
+      # - name: Configure secret
+      #   uses: aws-actions/configure-aws-credentials@v2
+      #   with:
+      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: ${{ secrets.AWS_REGION }}
+      #     aws-bucket: ${{ secrets.S3_BUCKET_NAME }}
+      #     file-path: ./mati-json-diffs/
+          
       # Calls json diff action
       - name: Call json-diff
         run: |
@@ -62,7 +72,9 @@ jobs:
             echo ${i}
             b =${i##*/}
             echo ${b}
-            DIFF_RESULTS_${b}=jd "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/${i}" "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/pull-request/${i}"
-            echo $DIFF_RESULTSS_${b}
+            DIFF_RESULTS=jd "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/${i}" "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/pull-request/${i}"
+            echo $DIFF_RESULTSS
           done
-          # jd "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/Fact Financial Metrics/Fact_Financial_Metrics.ORCHESTRATION" "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/pull-request/ROOT/Fact Financial Metrics/Fact_Financial_Metrics.ORCHESTRATION"
+          # jd "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/Fact Financial Metrics/Fact_Financial_Metrics.ORCHESTRATION" 
+          # "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/pull-request/ROOT/Fact Financial Metrics/Fact_Financial_Metrics.ORCHESTRATION"
+      
