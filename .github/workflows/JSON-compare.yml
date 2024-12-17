@@ -49,7 +49,7 @@ jobs:
           DIFF_FILES=$(git log --name-only) >> $GITHUB_ENV
           # for troubleshooting use
           # echo "This is initialization of enviornment variable: "$DIFF_FILES
-          cat > files.txt << $DIFF_FILES
+          cat <<< $DIFF_FILES < files.txt
           cat files.txt
           echo "Initialization of files.txt"
           # ${parameter/pattern/string} replacement where:
