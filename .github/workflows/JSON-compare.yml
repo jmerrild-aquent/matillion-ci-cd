@@ -47,7 +47,8 @@ jobs:
         run: |
           cd ${{ github.workspace }}/pull-request/ROOT/
           DIFF_FILES=$(git log --name-only) >> $GITHUB_ENV
-          echo "This is initialization of enviornment variable: $DIFF_FILES"
+          # for troubleshooting use
+          # echo "This is initialization of enviornment variable: $DIFF_FILES"
           cat > files.txt << $DIFF_FILES
           cat files.txt
           echo "Initialization of files.txt"
