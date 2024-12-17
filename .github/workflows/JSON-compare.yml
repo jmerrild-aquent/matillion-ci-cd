@@ -49,17 +49,18 @@ jobs:
           DIFF_FILES=$(git log --name-only) >> $GITHUB_ENV
           echo "This is initialization of enviornment variable: $DIFF_FILES"
           cat > files.txt << $DIFF_FILES
+          cat files.txt
           echo "Initialization of files.txt"
           # ${parameter/pattern/string} replacement where:
           # parameter is the original string
           # pattern is the pattern to find and replace
           # string is the replacement value
           files = sed 1,4d files.txt
-          echo "Initialization of variable files: ${files}"
+          echo "Initialization of variable files: "${files}
           files=${files/".TRANSFORMATION"/".TRANSFORMATION,"}
-          echo "Update of Transformations in variable files: ${files}"          
+          echo "Update of Transformations in variable files: "${files}          
           files=${files/".ORCHESTRATION"/".ORCHESTRATION,"}
-          echo "Update of Orchestrations in variable files: ${files}"
+          echo "Update of Orchestrations in variable files: "${files}
           DIFF_FILES_LIST=${files} >> $GITHUB_ENV
           echo "This is initialization enviornment variable array: $DIFF_FILES_LIST"
 
