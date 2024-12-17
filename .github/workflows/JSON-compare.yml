@@ -62,7 +62,8 @@ jobs:
           echo "Update of Transformations in variable files: "${files}          
           files=${files/".ORCHESTRATION"/".ORCHESTRATION,"}
           echo "Update of Orchestrations in variable files: "${files}
-          DIFF_FILES_LIST=${files} >> $GITHUB_ENV
+          DIFF_FILES=$(${files}) >> $GITHUB_ENV
+          DIFF_FILES_LIST=$DIFF_FILES >> $GITHUB_ENV
           echo "This is initialization enviornment variable array: $DIFF_FILES_LIST"
 
       # # set s2 credentials 
