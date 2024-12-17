@@ -56,7 +56,7 @@ jobs:
           # string is the replacement value
           files = sed 1,4d files.txt
           echo "Initialization of variable files: ${files}"
-          files=${${files/".TRANSFORMATION"/".TRANSFORMATION,"}//".ORCHESTRATION"/".ORCHESTRATION,"}
+          files=${${files/".TRANSFORMATION"/".TRANSFORMATION,"}/".ORCHESTRATION"/".ORCHESTRATION,"}
           echo "Update of variable files: ${files}"
           DIFF_FILES_LIST=${files} >> $GITHUB_ENV
           echo "This is initialization enviornment variable array: $DIFF_FILES_LIST"
