@@ -51,11 +51,11 @@ jobs:
           # echo "This is initialization of enviornment variable: ${{ env.DIFF_FILES }}"
           cat > files.txt
           cat <<< $DIFF_FILES < files.txt
-          cat files.txt
+          echo $(cat files.txt)
           echo "Initialization of files.txt"
           files=$(sed '1,4d' files.txt)
-          echo 'cat files.txt'
-          files='cat files.txt'
+          echo $(cat files.txt)
+          files=$(cat files.txt)
           echo "Initialization of variable files: ${files}"
           
           # ${parameter/pattern/string} replacement where:
