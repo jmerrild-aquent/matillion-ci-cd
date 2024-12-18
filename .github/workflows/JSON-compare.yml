@@ -58,6 +58,8 @@ jobs:
           # pattern is the pattern to find and replace
           # string is the replacement value
           sed '1,4d' files.txt
+          echo files.txt
+          cat files.txt
           files=cat files.txt
           echo "Initialization of variable files: "${files}
           files=${files/".TRANSFORMATION"/".TRANSFORMATION,"}
