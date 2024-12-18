@@ -27,11 +27,13 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: main
+          
       - name: 'Checkout PR branch'
         uses: actions/checkout@v4
         with:
           ref:  ${{ github.event.pull_request.head.sha }}
           path: pull-request
+          
       # Set up Go for jd command funtionality
       - name: Set up GO
         uses: actions/setup-go@v4
@@ -42,36 +44,53 @@ jobs:
       - name: Install json-diff
         run:
          go install github.com/josephburnett/jd@latest
+         
       # Gets all diff files
-      - name: Gets all diff files in PR
+      - name: Initialize diff_files Enviornment variable
         run: |
           cd ${{ github.workspace }}/pull-request/ROOT/
-          DIFF_FILES=$(git log --name-only) >> $GITHUB_ENV
+          echo "diff_files=$(git log --name-only)" >> $GITHUB_ENV
           # for troubleshooting use
-          echo "This is initialization of enviornment variable: ${{ env.DIFF_FILES }}"
+          echo "This is initialization of enviornment variable: ${{ env.diff_files }}"
+          
+      - name: Create file to manipulate text to achieve a list of files with change
+        run: |
           cat > files.txt
-          cat <<< "$(${{ env.DIFF_FILES }})" < files.txt
+          cat <<< "$(${{ env.diff_files }})" < files.txt
           echo $(cat files.txt)
           echo "Initialization of files.txt"
+          
+      - name: Manipulate text file to achieve a list of files with change and no extra header rows
+        run: |
           files=$(sed '1,4d' files.txt)
           echo $(cat files.txt)
           files=$(cat files.txt)
           echo "Initialization of variable files: ${files}"
-          
+
+      - name: Initialize and add commas to list of files within the files variable(BASH variable)
+        run: |
           # ${parameter/pattern/string} replacement where:
           # parameter is the original string
           # pattern is the pattern to find and replace
           # string is the replacement value
           
+          # Transformation commas
           files=${files/".TRANSFORMATION"/".TRANSFORMATION,"}
           echo "Update of Transformations in variable files: ${files}"
           
+          # Orchestration commas
           files=${files/".ORCHESTRATION"/".ORCHESTRATION,"}
           echo "Update of Orchestrations in variable files: ${files}"
 
+          # Remove line feeds
+          files=${files/"\n"/""}
+          echo "Update of Orchestrations in variable files: ${files}"
+          
+      - name: Update enviornment variable with updated list with commas
+        run: |
           # get list into envoirnment variable
-          DIFF_FILES=$(${files}) >> $GITHUB_ENV
-          DIFF_FILES_LIST=$DIFF_FILES >> $GITHUB_ENV
+          # DIFF_FILES=$(${files}) >> $GITHUB_ENV
+          DIFF_FILES_LIST=$(${files}) >> $GITHUB_ENV
           echo "This is initialization enviornment variable delimited set of files: ${{ env.DIFF_FILES_LIST }}"
 
       # # set s2 credentials 
