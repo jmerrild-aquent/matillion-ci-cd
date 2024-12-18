@@ -51,23 +51,21 @@ jobs:
           cd ${{ github.workspace }}/pull-request/ROOT/
           echo "diff_files=$(git log --name-only)" >> $GITHUB_ENV
           # for troubleshooting use
-          echo "This is initialization of enviornment variable: ${{ env.diff_files }}"
+          echo "This is initialization of enviornment variable: $diff_files"
           
       - name: Create file to manipulate text to achieve a list of files with change
         run: |
           cat > files.txt
-          cat <<< "$(${{ env.diff_files }})" < files.txt
-          echo $(cat files.txt)
+          cat <<< "$diff_files" < files.txt
           echo "Initialization of files.txt"
-          
-      - name: Manipulate text file to achieve a list of files with change and no extra header rows
-        run: |
-          files=$(sed '1,4d' files.txt)
           echo $(cat files.txt)
-          files=$(cat files.txt)
-          echo "Initialization of variable files: ${files}"
+          
+      - name: Manipulate text file to achieve a list of files with change and no extra header rows and load into BASH variable
+        run: |
+          files=$(sed '1,4d' files.txt)          
+          echo "Removed unnecissary rows: ${files}"
 
-      - name: Initialize and add commas to list of files within the files variable(BASH variable)
+      - name: Update the files variable(BASH variable) and add commas and remove line feeds to the list of files within
         run: |
           # ${parameter/pattern/string} replacement where:
           # parameter is the original string
@@ -86,12 +84,11 @@ jobs:
           files=${files/"\n"/""}
           echo "Update of Orchestrations in variable files: ${files}"
           
-      - name: Update enviornment variable with updated list with commas
+      - name: Initialize enviornment variable with updated list with commas
         run: |
           # get list into envoirnment variable
           # DIFF_FILES=$(${files}) >> $GITHUB_ENV
           DIFF_FILES_LIST=$(${files}) >> $GITHUB_ENV
-          echo "This is initialization enviornment variable delimited set of files: ${{ env.DIFF_FILES_LIST }}"
 
       # # set s2 credentials 
       # - name: Configure secret
