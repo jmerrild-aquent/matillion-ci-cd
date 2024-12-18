@@ -48,7 +48,7 @@ jobs:
           cd ${{ github.workspace }}/pull-request/ROOT/
           DIFF_FILES=$(git log --name-only) >> $GITHUB_ENV
           # for troubleshooting use
-          # echo "This is initialization of enviornment variable: "$DIFF_FILES
+          # echo "This is initialization of enviornment variable: ${{ env.DIFF_FILES }}"
           cat > files.txt
           cat <<< $DIFF_FILES < files.txt
           cat files.txt
@@ -61,14 +61,14 @@ jobs:
           echo files.txt
           cat files.txt
           files='cat files.txt'
-          echo "Initialization of variable files: "${files}
+          echo "Initialization of variable files: ${files}"
           files=${files/".TRANSFORMATION"/".TRANSFORMATION,"}
-          echo "Update of Transformations in variable files: "${files}          
+          echo "Update of Transformations in variable files: ${files}"          
           files=${files/".ORCHESTRATION"/".ORCHESTRATION,"}
-          echo "Update of Orchestrations in variable files: "${files}
+          echo "Update of Orchestrations in variable files: ${files}"
           DIFF_FILES=$(${files}) >> $GITHUB_ENV
           DIFF_FILES_LIST=$DIFF_FILES >> $GITHUB_ENV
-          echo "This is initialization enviornment variable array: $DIFF_FILES_LIST"
+          echo "This is initialization enviornment variable delimited set of files: ${{ env.DIFF_FILES_LIST }}"
 
       # # set s2 credentials 
       # - name: Configure secret
