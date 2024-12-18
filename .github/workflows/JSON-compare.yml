@@ -53,19 +53,23 @@ jobs:
           cat <<< $DIFF_FILES < files.txt
           cat files.txt
           echo "Initialization of files.txt"
+          files=$(sed '1,4d' files.txt)
+          echo 'cat files.txt'
+          files='cat files.txt')
+          echo "Initialization of variable files: ${files}"
+          
           # ${parameter/pattern/string} replacement where:
           # parameter is the original string
           # pattern is the pattern to find and replace
           # string is the replacement value
-          files="sed '1,4d' files.txt"
-          echo files.txt
-          cat files.txt
-          files='cat files.txt'
-          echo "Initialization of variable files: ${files}"
+          
           files=${files/".TRANSFORMATION"/".TRANSFORMATION,"}
-          echo "Update of Transformations in variable files: ${files}"          
+          echo "Update of Transformations in variable files: ${files}"
+          
           files=${files/".ORCHESTRATION"/".ORCHESTRATION,"}
           echo "Update of Orchestrations in variable files: ${files}"
+
+          # get list into envoirnment variable
           DIFF_FILES=$(${files}) >> $GITHUB_ENV
           DIFF_FILES_LIST=$DIFF_FILES >> $GITHUB_ENV
           echo "This is initialization enviornment variable delimited set of files: ${{ env.DIFF_FILES_LIST }}"
