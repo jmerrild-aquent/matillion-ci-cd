@@ -52,7 +52,7 @@ jobs:
           diff_files=$(git log --name-only)
           echo "diff_files=${diff_files}" >> $GITHUB_ENV
           # for troubleshooting use
-          echo "This is initialization of enviornment variable: $diff_files"
+          # echo "This is initialization of enviornment variable: $diff_files"
           
       - name: Create file to manipulate text to achieve a list of files with change
         run: |
