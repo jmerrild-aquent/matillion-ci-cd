@@ -56,8 +56,7 @@ jobs:
           
       - name: Create file to manipulate text to achieve a list of files with change
         run: |
-          cat > files.txt
-          cat <<< "$diff_files" < files.txt
+          echo "$diff_files" > cat files.txt
           echo "Initialization of files.txt"
           echo $(cat files.txt)
           
