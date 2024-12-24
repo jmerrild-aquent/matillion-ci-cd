@@ -68,17 +68,19 @@ jobs:
           start_line=$(grep -n "ROOT" ./files.txt)
           end_line=$(grep -c ^ ./files.txt)
           end_line="$(($end_line-1))"
-          sed -i '"$start_line","$end_line"d' files.txt     
+          sed -i '"${start_line}","${end_line}"d' files.txt     
           } >> "#GITHUB_ENV"
                
-          echo "Removed unnecissary rows: ${files}"
+          echo "Removed unnecessary rows: $diff_files"
       - name: Update the files variable(BASH variable) and add commas and remove line feeds to the list of files within
         run: |
           # ${parameter/pattern/string} replacement where:
           # parameter is the original string
           # pattern is the pattern to find and replace
           # string is the replacement value
-          
+          # intiailize variable
+          {
+          files=$diff_files
           # Transformation commas
           files=${files/".TRANSFORMATION"/".TRANSFORMATION,"}
           echo "Update of Transformations in variable files: ${files}"
@@ -90,11 +92,11 @@ jobs:
           # Remove line feeds
           files=${files/"\n"/""}
           echo "Update of Orchestrations in variable files: ${files}"
-          
+          echo "diff_files=$files" >> "$GITHUB_ENV"
       - name: Initialize enviornment variable with updated list with commas
         run: |
           # get list into envoirnment variable
-          DIFF_FILES_LIST=$(${files}) >> $GITHUB_ENV
+          echo "diff_files_list=${files}" >> "$GITHUB_ENV"
 
       # # set s2 credentials 
       # - name: Configure secret
