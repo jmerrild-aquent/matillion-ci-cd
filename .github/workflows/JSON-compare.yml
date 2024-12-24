@@ -74,8 +74,10 @@ jobs:
           
       - name: Manipulate text file to achieve a list of files with change and no extra header rows and load into BASH variable
         run: |
-          start_line = grep -n "ROOT" filename.txt
-          files=$(sed -i '${start_line},$-1 d' myfile.txt)          
+          start_line = grep -n "ROOT" files.txt
+          end_line = grep -c ^ files
+          end_line -=
+          files=$(sed -i "$start_line,$end_line d" files.txt)          
           echo "Removed unnecissary rows: ${files}"
 
       - name: Update the files variable(BASH variable) and add commas and remove line feeds to the list of files within
@@ -100,7 +102,6 @@ jobs:
       - name: Initialize enviornment variable with updated list with commas
         run: |
           # get list into envoirnment variable
-          # DIFF_FILES=$(${files}) >> $GITHUB_ENV
           DIFF_FILES_LIST=$(${files}) >> $GITHUB_ENV
 
       # # set s2 credentials 
