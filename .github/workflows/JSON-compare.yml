@@ -48,23 +48,12 @@ jobs:
       # Gets all diff files
       - name: Initialize diff_files Enviornment variable
         run: |
-          # cd ${{ github.workspace }}/pull-request/ROOT/
-          # diff_files=$(git log --name-only)
-          # echo "rds_endpoint<<EOF" >> $GITHUB_ENV
-          # echo "$RDS_ENDPOINT" >> $GITHUB_ENV
-          # echo "EOF" >> $GITHUB_ENV
-          # echo "{environment_variable_name}={value}" >> "$GITHUB_ENV"
-
           {
           echo 'diff_files<<EOF'
           cd ${{ github.workspace }}/pull-request/ROOT/
           git log --name-only
           echo EOF
           } >> "$GITHUB_ENV"
-          
-          # echo "diff_files=${diff_files}" >> "$GITHUB_ENV"
-          # for troubleshooting use
-          # echo "This is initialization of enviornment variable: $diff_files"
           
       - name: Create file to manipulate text to achieve a list of files with change
         run: |
@@ -74,12 +63,15 @@ jobs:
           
       - name: Manipulate text file to achieve a list of files with change and no extra header rows and load into BASH variable
         run: |
-          start_line=$(grep -n "ROOT" files.txt)
-          end_line=$(grep -c ^ files)
-          end_line -=
-          files=$(sed -i "$start_line,$end_line d" files.txt)          
+          {
+          echo 'diff_files<<EOF'
+          start_line=$(grep -n "ROOT" ./files.txt)
+          end_line=$(grep -c ^ ./files.txt)
+          end_line="$(($end_line-1))"
+          sed -i '"$start_line","$end_line"d' files.txt     
+          } >> "#GITHUB_ENV"
+               
           echo "Removed unnecissary rows: ${files}"
-
       - name: Update the files variable(BASH variable) and add commas and remove line feeds to the list of files within
         run: |
           # ${parameter/pattern/string} replacement where:
