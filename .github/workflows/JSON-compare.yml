@@ -74,8 +74,8 @@ jobs:
           
       - name: Manipulate text file to achieve a list of files with change and no extra header rows and load into BASH variable
         run: |
-          start_line = grep -n "ROOT" files.txt
-          end_line = grep -c ^ files
+          start_line=$(grep -n "ROOT" files.txt)
+          end_line=$(grep -c ^ files)
           end_line -=
           files=$(sed -i "$start_line,$end_line d" files.txt)          
           echo "Removed unnecissary rows: ${files}"
