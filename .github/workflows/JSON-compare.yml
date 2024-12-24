@@ -57,6 +57,7 @@ jobs:
 
           {
           echo 'diff_files<<EOF'
+          cd ${{ github.workspace }}/pull-request/ROOT/
           git log --name-only
           echo EOF
           } >> "$GITHUB_ENV"
