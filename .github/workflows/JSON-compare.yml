@@ -50,7 +50,6 @@ jobs:
         run: |
           cd ${{ github.workspace }}/pull-request/ROOT/
           diff_files=$(git log --name-only)
-          echo "diff_files=${diff_files}" >> $GITHUB_ENV
           # for troubleshooting use
           # echo "This is initialization of enviornment variable: $diff_files"
           
