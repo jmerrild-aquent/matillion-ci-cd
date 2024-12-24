@@ -57,22 +57,22 @@ jobs:
           
       - name: Create file to manipulate text to achieve a list of files with change
         run: |
-          echo "$diff_files" > files.txt
-          echo "Initialization of files.txt"
-          echo $(cat files.txt)
+          echo "$diff_files" > diff_files.txt
+          echo "Initialization of diff_files.txt"
+          echo $(cat diff_files.txt)
           
-      - name: Manipulate text file to achieve a list of files with change and no extra header rows and load into BASH variable
+      - name: Manipulate text file to achieve a list of files with change and no extra header rows or incosequential change such as version/workflow and load into BASH variable
         run: |
           {
           echo 'diff_files<<EOF'
-          start_line=$(grep -n "ROOT" ./files.txt)
-          end_line=$(grep -c ^ ./files.txt)
+          start_line=$(grep -n "ROOT" ./diff_files.txt)
+          end_line=$(grep -c ^ ./diff_files.txt)
           end_line="$(($end_line-1))"
-          sed -i '"${start_line}","${end_line}"d' files.txt     
+          sed -i '"${start_line}","${end_line}"d' ./diff_files.txt     
           } >> "#GITHUB_ENV"
                
           echo "Removed unnecessary rows: $diff_files"
-      - name: Update the files variable(BASH variable) and add commas and remove line feeds to the list of files within
+      - name: Update the enviornment variable and add commas and remove line feeds to the list of files within
         run: |
           # ${parameter/pattern/string} replacement where:
           # parameter is the original string
@@ -93,10 +93,6 @@ jobs:
           files=${files/"\n"/""}
           echo "Update of Orchestrations in variable files: ${files}"
           echo "diff_files=$files" >> "$GITHUB_ENV"
-      - name: Initialize enviornment variable with updated list with commas
-        run: |
-          # get list into envoirnment variable
-          echo "diff_files_list=${files}" >> "$GITHUB_ENV"
 
       # # set s2 credentials 
       # - name: Configure secret
@@ -116,7 +112,7 @@ jobs:
             b =${i##*/}
             echo ${b}
             DIFF_RESULTS=jd "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/${i}" "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/pull-request/${i}"
-            echo $DIFF_RESULTSS
+            echo ${DIFF_RESULTS}
           done
           # jd "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/Fact Financial Metrics/Fact_Financial_Metrics.ORCHESTRATION" 
           # "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/pull-request/ROOT/Fact Financial Metrics/Fact_Financial_Metrics.ORCHESTRATION"
