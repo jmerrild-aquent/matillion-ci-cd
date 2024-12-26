@@ -1,4 +1,4 @@
-# This is workflow job to execute JSON-compare of matillion objects
+ho# This is workflow job to execute JSON-compare of matillion objects
 
 name: JSON-compare
 
@@ -109,12 +109,13 @@ jobs:
       # Calls json diff action
       - name: Call json-diff
         run: |
+          rn=1
           for i in $DIFF_FILES_LIST; do 
             echo ${i}
             b =${i##*/}
             echo ${b}
-            DIFF_RESULTS=jd "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/${i}" "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/pull-request/${i}"
-            echo ${DIFF_RESULTS}
+            echo $(jd "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/${i}" "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/pull-request/${i}") > diff_file_${i}.txt
+            cat diff_file_${i}.txt
           done
           # jd "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/Fact Financial Metrics/Fact_Financial_Metrics.ORCHESTRATION" 
           # "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/pull-request/ROOT/Fact Financial Metrics/Fact_Financial_Metrics.ORCHESTRATION"
