@@ -51,7 +51,7 @@ jobs:
           {
           echo 'diff_files<<EOF'
           cd ${{ github.workspace }}/pull-request/ROOT/
-          git log --name-only
+          git log --name-only -- ./Fact Finanical Metrics/
           echo EOF
           } >> "$GITHUB_ENV"
           
@@ -94,9 +94,8 @@ jobs:
           echo "Update of Orchestrations in variable files: ${files}"
 
           # Remove line feeds
-          files=${files/"\n"/""}
-          echo "Update of Orchestrations in variable files: ${files}"
-          echo "diff_files=$files" >> "$GITHUB_ENV"
+          files=${files/"\n"/""} >> "$GITHUB_ENV"
+          echo "Update of list to remove line feed in variable files: ${files}"
 
       # # set s2 credentials 
       # - name: Configure secret
