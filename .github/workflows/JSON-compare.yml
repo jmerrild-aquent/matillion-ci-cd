@@ -68,7 +68,7 @@ jobs:
           start_line=$(grep -n "ROOT" ./diff_files.txt)
           end_line=$(grep -c ^ ./diff_files.txt)
           end_print_line="$(($end_line-1))"
-          sed -n "${start_line},${end_print_line}p;${end_line}q" diff_files > no_extra_diff_files
+          sed -n $start_line','$end_print_line'p;'$end_line'q' diff_files > no_extra_diff_files
           echo 'cat no_extra_diff_files'
           } >> "#GITHUB_ENV"
           # sed -n '16224,16482p;16483q' filename > newfile
