@@ -49,7 +49,10 @@ jobs:
       - name: Initialize diff_files Enviornment variable
         run: |
           {
-          grep "^ROOT/" f.txt
+          echo 'diff_files<<EOF'
+          git log --name-only >> diff_files.txt
+          grep "^ROOT/" diff_files.txt
+          echo EOF
           } >> "$GITHUB_ENV"
           echo $diff_files
       # - name: Create file to manipulate text to achieve a list of files with change
