@@ -54,50 +54,50 @@ jobs:
           git log --name-only -- ./Fact Finanical Metrics/
           echo EOF
           } >> "$GITHUB_ENV"
+          echo $diff_files
+      # - name: Create file to manipulate text to achieve a list of files with change
+      #   run: |
+      #     echo "$diff_files" > diff_files.txt
+      #     echo "Initialization of diff_files.txt"
+      #     echo $(cat diff_files.txt)
           
-      - name: Create file to manipulate text to achieve a list of files with change
-        run: |
-          echo "$diff_files" > diff_files.txt
-          echo "Initialization of diff_files.txt"
-          echo $(cat diff_files.txt)
+      # - name: Manipulate text file to achieve a list of files with change and no extra header rows or incosequential change such as version/workflow and load into BASH variable
+      #   run: |
+      #     {
+      #     echo 'diff_files<<EOF'
+      #     start_line=$(grep -n "ROOT" ./diff_files.txt)
+      #     end_line=$(grep -c ^ ./diff_files.txt)
+      #     end_print_line="$(($end_line-1))"
+      #     # "${!var}"
+      #     awk 'FNR=="$start_line",FNR=="end_print_line" {print FNR ":" $0}' diff_files.txt
+      #     # sed -n "$start_line','$end_print_line'p;'$end_line'q'" diff_files > no_extra_diff_files
+      #     echo $(cat ./diff_files.txt)
+      #     } >> "#GITHUB_ENV"
+      #     # awk 'FNR==10,FNR==20 {print FNR ":" $0}' file.txt
+      #     # sed -n '16224,16482p;16483q' filename > newfile
+      #     echo "Removed unnecessary rows: $diff_files"
+      # - name: Update the enviornment variable and add commas and remove line feeds to the list of files within
+      #   run: |
+      #     # ${parameter/pattern/string} replacement where:
+      #     # parameter is the original string
+      #     # pattern is the pattern to find and replace
+      #     # string is the replacement value
+      #     # intiailize variable
+      #     {
+      #     files=$diff_files
+      #     # Transformation commas
+      #     files=${files/".TRANSFORMATION"/".TRANSFORMATION,"}
+      #     echo "Update of Transformations in variable files: ${files}"
           
-      - name: Manipulate text file to achieve a list of files with change and no extra header rows or incosequential change such as version/workflow and load into BASH variable
-        run: |
-          {
-          echo 'diff_files<<EOF'
-          start_line=$(grep -n "ROOT" ./diff_files.txt)
-          end_line=$(grep -c ^ ./diff_files.txt)
-          end_print_line="$(($end_line-1))"
-          # "${!var}"
-          awk 'FNR=="$start_line",FNR=="end_print_line" {print FNR ":" $0}' diff_files.txt
-          # sed -n "$start_line','$end_print_line'p;'$end_line'q'" diff_files > no_extra_diff_files
-          echo $(cat ./diff_files.txt)
-          } >> "#GITHUB_ENV"
-          # awk 'FNR==10,FNR==20 {print FNR ":" $0}' file.txt
-          # sed -n '16224,16482p;16483q' filename > newfile
-          echo "Removed unnecessary rows: $diff_files"
-      - name: Update the enviornment variable and add commas and remove line feeds to the list of files within
-        run: |
-          # ${parameter/pattern/string} replacement where:
-          # parameter is the original string
-          # pattern is the pattern to find and replace
-          # string is the replacement value
-          # intiailize variable
-          {
-          files=$diff_files
-          # Transformation commas
-          files=${files/".TRANSFORMATION"/".TRANSFORMATION,"}
-          echo "Update of Transformations in variable files: ${files}"
-          
-          # Orchestration commas
-          files=${files/".ORCHESTRATION"/".ORCHESTRATION,"}
-          echo "Update of Orchestrations in variable files: ${files}"
+      #     # Orchestration commas
+      #     files=${files/".ORCHESTRATION"/".ORCHESTRATION,"}
+      #     echo "Update of Orchestrations in variable files: ${files}"
 
-          # Remove line feeds
-          files=${files/"\n"/""} >> "$GITHUB_ENV"
-          echo "Update of list to remove line feed in variable files: ${files}"
+      #     # Remove line feeds
+      #     files=${files/"\n"/""} >> "$GITHUB_ENV"
+      #     echo "Update of list to remove line feed in variable files: ${files}"
 
-      # # set s2 credentials 
+      # # # set s2 credentials 
       # - name: Configure secret
       #   uses: aws-actions/configure-aws-credentials@v2
       #   with:
