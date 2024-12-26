@@ -69,7 +69,7 @@ jobs:
           end_line=$(grep -c ^ ./diff_files.txt)
           end_print_line="$(($end_line-1))"
           # "${!var}"
-          awk 'FNR=="${!start_line},FNR=="${!end_print_line} {print FNR ":" $0}' diff_files.txt
+          awk 'FNR==${!start_line},FNR==${!end_print_line} {print FNR ":" $0}' diff_files.txt
           # sed -n "$start_line','$end_print_line'p;'$end_line'q'" diff_files > no_extra_diff_files
           echo $(cat ./diff_files.txt)
           } >> "#GITHUB_ENV"
