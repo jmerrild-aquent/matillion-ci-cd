@@ -1,4 +1,4 @@
-ho# This is workflow job to execute JSON-compare of matillion objects
+# This is workflow job to execute JSON-compare of matillion objects
 
 name: JSON-compare
 
