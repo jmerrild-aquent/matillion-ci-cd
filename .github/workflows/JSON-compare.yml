@@ -68,7 +68,7 @@ jobs:
           start_line=$(grep -n "ROOT" ./diff_files.txt)
           end_line=$(grep -c ^ ./diff_files.txt)
           end_line="$(($end_line-1))"
-          sed -i "${start_line},${end_line}d" diff_files
+          sed -i "${start_line},${end_line}p" diff_files
           } >> "#GITHUB_ENV"
                
           echo "Removed unnecessary rows: $diff_files"
