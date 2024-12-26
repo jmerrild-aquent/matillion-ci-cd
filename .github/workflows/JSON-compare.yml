@@ -115,7 +115,7 @@ jobs:
             b =${i##*/}
             echo ${b}
             echo $(jd "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/${i}" "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/pull-request/${i}") > diff_file_${i}.txt
-            cat diff_file_${i}.txt
+            echo diff_file_${i}.txt
           done
           # jd "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/Fact Financial Metrics/Fact_Financial_Metrics.ORCHESTRATION" 
           # "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/pull-request/ROOT/Fact Financial Metrics/Fact_Financial_Metrics.ORCHESTRATION"
