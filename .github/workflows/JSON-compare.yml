@@ -49,7 +49,8 @@ jobs:
       - name: Initialize diff_files Enviornment variable
         run: |
           {
-          echo 'diff_files<<EOF'
+          echo 'diff_files<<EOF'          
+          cd /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/
           git log --name-only >> diff_files.txt
           grep "^ROOT/" diff_files.txt
           echo EOF
