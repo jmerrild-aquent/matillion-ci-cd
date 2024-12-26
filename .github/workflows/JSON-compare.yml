@@ -49,10 +49,7 @@ jobs:
       - name: Initialize diff_files Enviornment variable
         run: |
           {
-          echo 'diff_files<<EOF'
-          cd ${{ github.workspace }}/pull-request/ROOT/
-          git log -- ./Fact Finanical Metrics/
-          echo EOF
+          grep "^ROOT/" f.txt
           } >> "$GITHUB_ENV"
           echo $diff_files
       # - name: Create file to manipulate text to achieve a list of files with change
