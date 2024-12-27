@@ -51,8 +51,9 @@ jobs:
           {
           echo 'diff_files<<EOF'
           cd /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/
-          diff=$(git log --name-only)          
-          diff=$(grep "^ROOT/" ./diff_files.txt)
+          diff=$(git log --name-only)
+          echo ${diff} >> diff_files.txt
+          diff=$(grep "^ROOT/" diff_files.txt)
           diff=\"${diff/".TRANSFORMATION "/"\",\""}\"
           diff=\"${diff/".ORCHESTRATION "/"\",\""}\"
           echo ${diff}
