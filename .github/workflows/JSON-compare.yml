@@ -51,18 +51,19 @@ jobs:
           {
           echo 'diff_files<<EOF'
           cd /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/
-          diff=$(git log --name-only)
-          diff=\"${diff/"\n"/"\",\""}\"
+          diff=$(git log --name-only)          
+          diff=$(grep "^ROOT/" diff_files.txt)
+          diff=\"${diff/".TRANSFORMATION "/"\",\""}\"
+          diff=\"${diff/".ORCHESTRATION "/"\",\""}\"
           echo ${diff}
           echo EOF
           } >> "$GITHUB_ENV"
-          echo $diff >> files.txt
+          echo "$diff_files" >> files.txt
           cat files.txt
           
       # Calls json diff action
       - name: Call json-diff
         run: |
-          rn=1
           for i in $DIFF_FILES_LIST; do 
             echo ${i}
             b =${i##*/}
