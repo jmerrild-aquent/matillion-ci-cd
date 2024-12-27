@@ -55,7 +55,8 @@ jobs:
           echo ${diff} >> diff_files.txt
           diff_files=$(grep "^ROOT/" diff_files.txt)
           diff_files=\"${diff_files/".TRANSFORMATION "/"\",\""}\"
-          echo \"${diff_files/".ORCHESTRATION "/"\",\""}\"
+          diff_files=\"${diff_files/".ORCHESTRATION "/"\",\""}\"
+          echo "${diff_files::-1}"
           echo EOF
           } >> "$GITHUB_ENV"
           echo "$diff_files" >> files.txt
