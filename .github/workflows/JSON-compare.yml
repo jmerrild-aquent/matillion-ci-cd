@@ -54,15 +54,9 @@ jobs:
           diff=$(git log --name-only)
           diff=\"${diff/"\n"/"\",\""}\"
           echo ${diff}
-          #  >> diff_files.txt
-          # files=${
-          # diff_files=$(grep "^ROOT/" diff_files.txt)
-          # echo ${diff_files}
-          
-          # echo ${diff_files}
           echo EOF
           } >> "$GITHUB_ENV"
-          echo $diff_files >> files.txt
+          echo $diff >> files.txt
           cat files.txt
           
       # Calls json diff action
