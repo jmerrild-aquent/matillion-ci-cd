@@ -56,11 +56,10 @@ jobs:
           diff_files=\"${diff_files//"ROOT/"/"/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/",\""}
           diff_files=\"${diff_files//".TRANSFORMATION"/".TRANSFORMATION\",\""}
           diff_files=${diff_files//".ORCHESTRATION"/".ORCHESTRATION\",\""}
-          diff_files=${diff_files::-1}
           echo ${diff_files}
           echo EOF
           } >> "$GITHUB_ENV"
-          
+          echo ${diff_files}
       # Calls json diff action
       - name: Call json-diff
         run: |
