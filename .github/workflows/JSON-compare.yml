@@ -52,10 +52,11 @@ jobs:
           echo 'diff_files<<EOF'
           cd /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/
           git log --name-only >> diff_files.txt
-          diff_files=$(grep "^ROOT/" diff_files.txt)            
+          diff_files=$(grep "^ROOT/" diff_files.txt)
+          diff_files=\"${diff_files//"ROOT/"/"/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/",\""}
           diff_files=\"${diff_files//".TRANSFORMATION"/".TRANSFORMATION\",\""}
           diff_files=${diff_files//".ORCHESTRATION"/".ORCHESTRATION\",\""}
-          echo ${diff_files}
+          echo ${diff_files::-1}
           echo EOF
           } >> "$GITHUB_ENV"
           
@@ -66,11 +67,9 @@ jobs:
             echo ${i}
             b =${i##*/}
             echo ${b}
-            echo $(jd "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/${i}" "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/pull-request/${i}") > diff_file_${i}.txt
-            echo file_name=diff_file_${i}.txt
+            echo $(jd ${i} ${i/"/main/"/"/pull-request/"}) > diff_file_${b}.txt
+            file_name=diff_file_${b}.txt
             echo file_name
             ls
           done
-          # jd "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/Fact Financial Metrics/Fact_Financial_Metrics.ORCHESTRATION" 
-          # "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/pull-request/ROOT/Fact Financial Metrics/Fact_Financial_Metrics.ORCHESTRATION"
       
