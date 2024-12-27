@@ -48,18 +48,18 @@ jobs:
       # Gets all diff files
       - name: Initialize diff_files Enviornment variable
         run: |
-          {
-          echo 'diff_files<<EOF'
+          # {
+          # echo 'diff_files<<EOF'
           cd /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/
           git log --name-only >> diff_files.txt
           diff_files=$(grep "^ROOT/" diff_files.txt)
           diff_files=${diff_files//"ROOT/"/"/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/",\""}
           diff_files=${diff_files//".TRANSFORMATION"/".TRANSFORMATION\",\""}
           diff_files=${diff_files//".ORCHESTRATION"/".ORCHESTRATION\",\""}
-          echo ${diff_files::-2}
-          echo EOF
-          } >> "$GITHUB_ENV"
-          echo $diff_files
+          echo ${diff_files}
+          # echo EOF
+          # } >> "$GITHUB_ENV"
+          # echo $diff_files
       # Calls json diff action
       - name: Call json-diff
         run: |
