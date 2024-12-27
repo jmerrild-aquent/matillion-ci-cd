@@ -48,19 +48,25 @@ jobs:
       # Gets all diff files
       - name: Initialize diff_files Enviornment variable
         run: |
-          # {
-          # echo 'diff_files<<EOF'
+          {
+          echo 'diff_files<<EOF'
           cd /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/
-          diff=$(git log --name-only)
-          echo ${diff}
-          echo ${diff} >> diff_files.txt
-          cat diff_files.txt
-          diff_files=$(grep "^ROOT/" diff_files.txt)
+          git log --name-only >> diff_files.txt
+          diff_files=$(grep "^ROOT/" diff_files.txt)            
+          diff_files=\"${diff_files/".TRANSFORMATION"/"\".TRANSFORMATION,\""}\"
+          diff_files=\"${diff_files/".ORCHESTRATION"/"\".ORCHESTRATION ,\""}\"
           echo ${diff_files}
-          diff_files=\"${diff_files/".TRANSFORMATION "/"\",\""}\"
-          diff_files=\"${diff_files/".ORCHESTRATION "/"\",\""}\"
-          echo ${diff_files::-1}
           echo EOF
+          } >> "$GITHUB_ENV"
+          # echo $diff_files
+          # diff=$(git log --name-only)
+          # # echo ${diff}
+          # echo ${diff} >> diff_files.txt
+          # # cat diff_files.txt
+          # diff_files=$(grep "^ROOT/" diff_files.txt)
+          # # echo ${diff_files}
+          # echo ${diff_files::-1}
+          # echo EOF
           # } >> "$GITHUB_ENV"
           # echo "$diff_files" >> files.txt
           # cat files.txt
