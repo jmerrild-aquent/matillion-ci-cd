@@ -27,11 +27,13 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: main
+          
       - name: 'Checkout PR branch'
         uses: actions/checkout@v4
         with:
           ref:  ${{ github.event.pull_request.head.sha }}
           path: pull-request
+          
       # Set up Go for jd command funtionality
       - name: Set up GO
         uses: actions/setup-go@v4
@@ -42,13 +44,32 @@ jobs:
       - name: Install json-diff
         run:
          go install github.com/josephburnett/jd@latest
+         
       # Gets all diff files
-      - name: Gets all diff files in PR
+      - name: Initialize diff_files Enviornment variable
         run: |
+          {
+          echo 'diff_files<<EOF'
           cd /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/
-          echo git diff --name-only 
-
+          git log --name-only >> diff_files.txt
+          diff_files=$(grep "^ROOT/" diff_files.txt)
+          diff_files=${diff_files//"ROOT/"/"/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/"}
+          diff_files=${diff_files//".TRANSFORMATION"/".TRANSFORMATION\",\""}
+          diff_files=${diff_files//".ORCHESTRATION"/".ORCHESTRATION\",\""}
+          echo ${diff_files::-2}
+          echo EOF
+          } >> "$GITHUB_ENV"
+          echo $diff_files
       # Calls json diff action
       - name: Call json-diff
-        run: 
-         echo jd "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/Fact Financial Metrics/Fact_Financial_Metrics.ORCHESTRATION" "/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/pull-request/ROOT/Fact Financial Metrics/Fact_Financial_Metrics.ORCHESTRATION"
+        run: |
+          for i in $diff_files; do 
+            echo ${i}
+            b =${i##*/}
+            echo ${b}
+            echo $(jd ${i} ${i/"/main/"/"/pull-request/"}) > diff_file_${b}.txt
+            file_name=diff_file_${b}.txt
+            echo file_name
+            ls
+          done
+      
