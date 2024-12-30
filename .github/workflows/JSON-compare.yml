@@ -68,7 +68,7 @@ jobs:
         run: |
           for i in $diff_files; do 
             echo ${i}
-            b =${i##*/}
+            b=${i##*/}
             echo ${b}
             echo $(jd ${i} ${i/"/main/"/"/pull-request/"}) > diff_file_${b}.txt
             file_name=diff_file_${b}.txt
