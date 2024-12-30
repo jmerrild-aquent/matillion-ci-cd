@@ -1,0 +1,75 @@
+# This is workflow job to execute JSON-compare of matillion objects
+
+name: JSON-compare
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # this is the job that creates the json-difference
+  compare:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checout main
+        uses: actions/checkout@v4
+        with:
+          path: main
+          
+      - name: 'Checkout PR branch'
+        uses: actions/checkout@v4
+        with:
+          ref:  ${{ github.event.pull_request.head.sha }}
+          path: pull-request
+          
+      # Set up Go for jd command funtionality
+      - name: Set up GO
+        uses: actions/setup-go@v4
+        with:
+            go-version: '1.20'
+
+      # Install jd command funtionality
+      - name: Install json-diff
+        run:
+         go install github.com/josephburnett/jd@latest
+         
+      # Gets all diff files
+      - name: Initialize diff_files Enviornment variable
+        run: |
+          {
+          echo 'diff_files<<EOF'
+          cd /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/
+          git log --name-only >> diff_files.txt
+          diff_files=$(grep "^ROOT/" diff_files.txt)
+          diff_files=${diff_files//"ROOT/"/"/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/"}
+          diff_files=${diff_files//".TRANSFORMATION"/".TRANSFORMATION\",\""}
+          diff_files=${diff_files//".ORCHESTRATION"/".ORCHESTRATION\",\""}
+          echo ${diff_files::-2}
+          echo EOF
+          } >> "$GITHUB_ENV"
+          echo $diff_files
+      # Calls json diff action
+      - name: Call json-diff
+        run: |
+          for i in $diff_files; do 
+            echo ${i}
+            b =${i##*/}
+            echo ${b}
+            echo $(jd ${i} ${i/"/main/"/"/pull-request/"}) > diff_file_${b}.txt
+            file_name=diff_file_${b}.txt
+            echo file_name
+            ls
+          done
+      
