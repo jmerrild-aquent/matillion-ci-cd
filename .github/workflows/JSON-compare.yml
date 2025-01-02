@@ -63,7 +63,7 @@ jobs:
           echo EOF
           } >> "$GITHUB_ENV"
           echo $diff_files
-      Calls json diff action
+      # Calls json diff action
       - name: Call json-diff
         run: |
           for i in $diff_files; do 
