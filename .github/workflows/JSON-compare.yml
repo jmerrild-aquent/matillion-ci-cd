@@ -63,6 +63,26 @@ jobs:
           echo EOF
           } >> "$GITHUB_ENV"
           echo ${diff_files[*]}
+
+      # Gets all right branch only objects
+      - name: Create list of main branch objects not in pull-request head
+        run: |
+          {
+          echo 'right_only<<EOF'
+          git log --cherry-pick --right-only
+          echo EOF
+          } >> $GITHUB_ENV
+          echo $right_only
+      # Gets all main branch only objects
+      - name: Create list of main branch objects not in pull-request head
+        run: |
+          {
+          echo 'left_only<<EOF'
+          git log --cherry-pick --left-only
+          echo EOF
+          } >> $GITHUB_ENV
+          echo $left_only
+          
       # Calls json diff action
       - name: Call json-diff
         run: |
