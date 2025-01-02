@@ -59,7 +59,7 @@ jobs:
           diff_files_txt=${diff_files_txt/".TRANSFORMATION"/".TRANSFORMATION\""}
           diff_files_txt=${diff_files_txt/".ORCHESTRATION"/".ORCHESTRATION\""}
           # diff_files_txt=${diff_files_txt/"\n"/" "} ## not needed
-          echo ${diff_files_txt}
+          echo (${diff_files_txt})
           echo EOF
           } >> "$GITHUB_ENV"
           echo $diff_files
