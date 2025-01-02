@@ -59,13 +59,14 @@ jobs:
           diff_files_txt=${diff_files_txt/".TRANSFORMATION"/".TRANSFORMATION\""}
           diff_files_txt=${diff_files_txt/".ORCHESTRATION"/".ORCHESTRATION\""}
           # diff_files_txt=${diff_files_txt/"\n"/" "} ## not needed
-          echo (${diff_files_txt})
+          diff_files=(${diff_files_txt})
+          echo ${diff_files}
           echo EOF
           } >> "$GITHUB_ENV"
           echo ${diff_files[*]}
 
       # Gets all right branch only objects
-      - name: Create list of main branch objects not in pull-request head
+      - name: Create list of main branch objects not in pull-request
         run: |
           {
           echo 'right_only<<EOF'
@@ -73,8 +74,9 @@ jobs:
           echo EOF
           } >> $GITHUB_ENV
           echo $right_only
+          
       # Gets all main branch only objects
-      - name: Create list of main branch objects not in pull-request head
+      - name: Create list of pull-request branch objects not in main
         run: |
           {
           echo 'left_only<<EOF'
