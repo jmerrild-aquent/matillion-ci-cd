@@ -51,35 +51,30 @@ jobs:
           {
           echo 'diff_files<<EOF'
           cd /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/
-          ls
+          # ls
           git log --name-only >> diff_files.txt
           diff_files_txt=$(grep "^ROOT/" diff_files.txt)
-          echo ${diff_files_txt}
-          diff_files_txt=${diff_files_txt/"/ROOT/"/"\"/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/ROOT/main/"}
-          echo ${diff_files_txt}
+          diff_files_txt=${diff_files_txt/"/ROOT/"/"\"/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/"}
           diff_files_txt=${diff_files_txt/"ROOT/"/"\"/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/"}
-          echo ${diff_files_txt}
           diff_files_txt=${diff_files_txt/".TRANSFORMATION"/".TRANSFORMATION\""}
-          echo ${diff_files_txt}
           diff_files_txt=${diff_files_txt/".ORCHESTRATION"/".ORCHESTRATION\""}
-          echo ${diff_files_txt}
           # diff_files_txt=${diff_files_txt/"\n"/" "} ## not needed
           echo ${diff_files_txt}
           echo EOF
           } >> "$GITHUB_ENV"
           echo $diff_files
-      # Calls json diff action
-      # - name: Call json-diff
-      #   run: |
-      #     for i in $diff_files; do 
-      #       echo ${i}
-      #       b=${i##*/}
-      #       b=${b::-1}
-      #       echo ${b}
-      #       n=${i/"/main/"/"/pull-request/"}
-      #       echo $(jd ${i} ${n}) > diff_file_${b}.txt
-      #       file_name=diff_file_${b}.txt
-      #       echo file_name
-      #       ls
-      #     done
+      Calls json diff action
+      - name: Call json-diff
+        run: |
+          for i in $diff_files; do 
+            echo ${i}
+            b=${i##*/}
+            b=${b::-1}
+            echo ${b}
+            n=${i/"/main/"/"/pull-request/"}
+            echo $(jd ${i} ${n}) > diff_file_${b}.txt
+            file_name=diff_file_${b}.txt
+            echo file_name
+            ls
+          done
       
