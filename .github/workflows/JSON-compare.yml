@@ -51,9 +51,10 @@ jobs:
           {
           echo 'diff_files<<EOF'
           cd /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/
+          ls
           git log --name-only >> diff_files.txt
           diff_files_txt=$(grep "^ROOT/" diff_files.txt)
-          diff_files_txt=${diff_files_txt/"/ROOT/"/"\"/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/"}
+          diff_files_txt=${diff_files_txt/"/ROOT/"/"\"/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/ROOT/main/"}
           diff_files_txt=${diff_files_txt/"ROOT/"/"\"/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/"}
           diff_files_txt=${diff_files_txt/".TRANSFORMATION"/".TRANSFORMATION\""}
           diff_files_txt=${diff_files_txt/".ORCHESTRATION"/".ORCHESTRATION\""}
@@ -69,8 +70,10 @@ jobs:
           for i in $diff_files; do 
             echo ${i}
             b=${i##*/}
+            b=${b::-1}
             echo ${b}
-            echo $(jd ${i} ${i/"/main/"/"/pull-request/"}) > diff_file_${b}.txt
+            n=${i/"/main/"/"/pull-request/"}
+            echo $(jd ${i} ${n}) > diff_file_${b}.txt
             file_name=diff_file_${b}.txt
             echo file_name
             ls
