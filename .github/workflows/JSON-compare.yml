@@ -69,7 +69,8 @@ jobs:
       - name: Create list of main branch objects not in pull-request
         run: |
           {
-          echo 'right_only<<EOF'
+          echo 'right_only<<EOF'          
+          cd /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/
           git log --cherry-pick --right-only
           echo EOF
           } >> $GITHUB_ENV
@@ -80,6 +81,7 @@ jobs:
         run: |
           {
           echo 'left_only<<EOF'
+          cd /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/
           git log --cherry-pick --left-only
           echo EOF
           } >> $GITHUB_ENV
