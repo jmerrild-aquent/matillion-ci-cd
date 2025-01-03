@@ -73,8 +73,12 @@ jobs:
           cd /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/
           git log --cherry-pick --right-only >> right_only.txt
           # git log --cherry-pick --right-only
-          has_files=$(grep -q "ROOT/" right_only.txt)
-          echo ${has_files}
+          if grep -q "ROOT/" right_only.txt; then
+            right_only=$(grep "^ROOT/" right_only.txt)
+            echo ${right_only/"\n"/" "}
+          else
+            echo "No Right only files"
+          fi
           
           # right_only=$(grep "^ROOT/" right_only.txt)
           # echo right_only
