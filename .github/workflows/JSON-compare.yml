@@ -51,25 +51,85 @@ jobs:
           {
           echo 'diff_files<<EOF'
           cd /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/
+          # ls
           git log --name-only >> diff_files.txt
-          diff_files=$(grep "^ROOT/" diff_files.txt)
-          diff_files=${diff_files//"ROOT/"/"/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/"}
-          diff_files=${diff_files//".TRANSFORMATION"/".TRANSFORMATION\",\""}
-          diff_files=${diff_files//".ORCHESTRATION"/".ORCHESTRATION\",\""}
-          echo ${diff_files::-2}
+          diff_files_txt=$(grep "^ROOT/" diff_files.txt)
+          diff_files_txt=${diff_files_txt/"/ROOT/"/"\"/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/"}
+          diff_files_txt=${diff_files_txt/"ROOT/"/"\"/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/"}
+          diff_files_txt=${diff_files_txt/".TRANSFORMATION"/".TRANSFORMATION\""}
+          diff_files_txt=${diff_files_txt/".ORCHESTRATION"/".ORCHESTRATION\""}
+          # diff_files_txt=${diff_files_txt/"\n"/" "} ## not needed
+          diff_files=(${diff_files_txt})
+          echo ${diff_files}
           echo EOF
           } >> "$GITHUB_ENV"
-          echo $diff_files
+          echo ${diff_files[*]}
+
+      # Gets all right branch only objects
+      - name: Create list of main branch objects not in pull-request
+        run: |
+          # {
+          # echo 'right_only<<EOF'          
+          cd /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/
+          git log --cherry-pick --right-only >> right_only.txt
+          if grep -q "ROOT/" right_only.txt; then
+            right_only=$(grep "^ROOT/" right_only.txt) >> right_only.txt
+            echo ${right_only/"\n"/" "}
+          else
+            echo "No Right only files"
+          fi
+          echo EOF
+          } >> $GITHUB_ENV
+          echo $right_only
+          
+      # Gets all main branch only objects
+      - name: Create list of pull-request branch objects not in main
+        run: |
+          {
+          echo 'left_only<<EOF'
+          cd /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/
+          git log --cherry-pick --left-only >> left_only.txt
+          if grep -q "ROOT/" left_only.txt; then
+            left_only=$(grep "^ROOT/" left_only.txt) >> left_only.txt
+            echo ${left_only/"\n"/" "}
+          else
+            echo "No Left only files"
+          fi
+          echo EOF
+          } >> $GITHUB_ENV
+          echo $left_only
+
+      # set nowts variable for run
+      - name: set nowts timestamp
+        run: |
+          {
+          echo 'rundt<<EOF'
+          rundt=$( date '+%F_%H:%M:%S' )
+          echo rundt
+          echo EOF
+          } >> $GITHUB_ENV
+          
       # Calls json diff action
       - name: Call json-diff
         run: |
-          for i in $diff_files; do 
+          diff_files_matches=${diff_files[@]} ${right_only[@]} | tr ' ' '\n' | sort | uniq -u
+          diff_files_matches=${diff_files_matches[@]} ${left_only[@]} | tr ' ' '\n' | sort | uniq -u >> diff_file_matches.txt
+          for i in ${diff_files_matches}; do 
             echo ${i}
-            b =${i##*/}
+            b=${i##*/}
+            b=${b::-1}
             echo ${b}
-            echo $(jd ${i} ${i/"/main/"/"/pull-request/"}) > diff_file_${b}.txt
-            file_name=diff_file_${b}.txt
+            n=${i/"/main/"/"/pull-request/"}
+            echo $(jd ${i} ${n}) >> diff_file_${b}.txt
+            file_name="diff_file_${b}.txt"
             echo file_name
-            ls
+            aws s3 cp ./${file_name} s3://dsg-ci-cd-outputs/$rundt/
           done
+
+      - name: upload files to S3
+        run: |
+          now=$( date '+%F_%H:%M:%S' )
+          aws s3 cp ./diff_file_matches.txt s3://dsg-ci-cd-outputs/$rundt/
+          aws s3 cp ./left_only.txt s3://dsg-ci-cd-outputs/$rundt/
+          aws s3 cp ./right_only.txt s3://dsg-ci-cd-outputs/$rundt/
       
