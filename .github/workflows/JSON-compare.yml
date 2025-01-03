@@ -77,9 +77,9 @@ jobs:
           echo ${has_files}
           
           # right_only=$(grep "^ROOT/" right_only.txt)
-          echo right_only
-          right_only=${right_only/"\n"/" "}
-          echo right_only
+          # echo right_only
+          # right_only=${right_only/"\n"/" "}
+          # echo right_only
           # echo EOF
           # } >> $GITHUB_ENV
           # echo $right_only
