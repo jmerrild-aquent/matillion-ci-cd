@@ -73,7 +73,7 @@ jobs:
           cd /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/
           git log --cherry-pick --right-only >> right_only.txt
           right_only=$(grep "^ROOT/" right_only.txt)
-          right_only=(${right_only/"\n"/" "}
+          right_only=${right_only/"\n"/" "}
           echo right_only
           echo EOF
           } >> $GITHUB_ENV
