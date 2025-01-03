@@ -68,30 +68,30 @@ jobs:
       # Gets all right branch only objects
       - name: Create list of main branch objects not in pull-request
         run: |
-          {
-          echo 'right_only<<EOF'          
+          # {
+          # echo 'right_only<<EOF'          
           cd /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/
           git log --cherry-pick --right-only >> right_only.txt
           right_only=$(grep "^ROOT/" right_only.txt)
           right_only=${right_only/"\n"/" "}
           echo right_only
-          echo EOF
-          } >> $GITHUB_ENV
-          echo $right_only
+          # echo EOF
+          # } >> $GITHUB_ENV
+          # echo $right_only
           
-      # Gets all main branch only objects
-      - name: Create list of pull-request branch objects not in main
-        run: |
-          {
-          echo 'left_only<<EOF'
-          cd /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/
-          git log --cherry-pick --left-only >> left_only.txt
-          left_only=$(grep "^ROOT/" left_only.txt)
-          left_only=${left_only/"\n"/" "}
-          echo left_only
-          echo EOF
-          } >> $GITHUB_ENV
-          echo $left_only
+      # # Gets all main branch only objects
+      # - name: Create list of pull-request branch objects not in main
+      #   run: |
+      #     {
+      #     echo 'left_only<<EOF'
+      #     cd /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/main/ROOT/
+      #     git log --cherry-pick --left-only >> left_only.txt
+      #     left_only=$(grep "^ROOT/" left_only.txt)
+      #     left_only=${left_only/"\n"/" "}
+      #     echo left_only
+      #     echo EOF
+      #     } >> $GITHUB_ENV
+      #     echo $left_only
           
       # Calls json diff action
       - name: Call json-diff
